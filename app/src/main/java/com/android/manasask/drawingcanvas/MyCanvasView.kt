@@ -109,6 +109,7 @@ class MyCanvasView(context: Context): View(context) {
         currentY = motionTouchEventY
     }
 
+    //called when user starts drawing
     private fun touchMove() {
         val dx=Math.abs(motionTouchEventX-currentX)
         val dy=Math.abs(motionTouchEventY-currentY)
@@ -124,7 +125,12 @@ class MyCanvasView(context: Context): View(context) {
         invalidate()
     }
 
-    private fun touchUp() {}
+    //called when user lifts up his hand
+    private fun touchUp() {
+        path.reset() // Reset the path so it doesn't get drawn again.
+    }
+
+    //rotate the device, the screen is cleared, because the drawing state is not saved. For this sample app, this is by design, to give the user a simple way to clear the screen.
 
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
