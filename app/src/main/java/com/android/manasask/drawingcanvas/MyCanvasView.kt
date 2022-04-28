@@ -10,6 +10,7 @@ import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.RectShape
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 
 class MyCanvasView(context: Context): View(context) {
@@ -51,6 +52,9 @@ class MyCanvasView(context: Context): View(context) {
     //variables to cache the latest x and y values. After the user stops moving and lifts their touch, these are the starting point for the next path (the next segment of the line to draw).
     private var currentX = 0f
     private var currentY = 0f
+
+    //whether user has barely moved his hand or drawn something on screen
+    private val touchTolerence=ViewConfiguration.get(context).scaledTouchSlop
 
     //set background color
     private val backgroundColor=ResourcesCompat.getColor(resources,R.color.colorBackground,null)
@@ -105,7 +109,20 @@ class MyCanvasView(context: Context): View(context) {
         currentY = motionTouchEventY
     }
 
-    private fun touchMove() {}
+    private fun touchMove() {
+        val dx=Math.abs(motionTouchEventX-currentX)
+        val dy=Math.abs(motionTouchEventY-currentY)
+        if(dx>=touchTolerence && dy>=touchTolerence){
+            // QuadTo() adds a quadratic bezier from the last point,
+            // approaching control point (x1,y1), and ending at (x2,y2).
+            path.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
+            currentX = motionTouchEventX
+            currentY = motionTouchEventY
+            // Draw the path in the extra bitmap to cache it.
+            extraCanvas.drawPath(path, paint)
+        }
+        invalidate()
+    }
 
     private fun touchUp() {}
 
