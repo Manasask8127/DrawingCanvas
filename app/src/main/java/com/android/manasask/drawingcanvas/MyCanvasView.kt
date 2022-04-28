@@ -3,11 +3,38 @@ package com.android.manasask.drawingcanvas
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.graphics.drawable.shapes.RectShape
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 
 class MyCanvasView(context: Context): View(context) {
-
+//    private val drawable: ShapeDrawable = run {
+//        val x = 10
+//        val y = 10
+//        val width = 300
+//        val height = 50
+//        contentDescription = context.resources.getString(R.string.canvasContentDescription)
+//
+//        ShapeDrawable(OvalShape()).apply {
+//            // If the color isn't set, the shape uses black as the default.
+//            paint.color = 0xff74AC23.toInt()
+//            // If the bounds aren't set, the shape can't be drawn.
+//            setBounds(x, y, x + width, y + height)
+//        }
+//        ShapeDrawable(RectShape()).apply {
+//            // If the color isn't set, the shape uses black as the default.
+//            paint.color = 0xff74AC23.toInt()
+//            // If the bounds aren't set, the shape can't be drawn.
+//            setBounds(x+width, y+width, x + 2*width, y + 2*height)
+//        }
+//    }
+//
+//    override fun onDraw(canvas: Canvas) {
+//        drawable.draw(canvas)
+//    }
+//
     //bitmap and canvas for caching what has been drawn before.
     private lateinit var extraBitmap:Bitmap
     private lateinit var extraCanvas: Canvas

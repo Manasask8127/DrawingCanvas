@@ -10,6 +10,8 @@ class MainActivity : AppCompatActivity() {
 
         //implementing canvas description page
         //setContentView(R.layout.activity_main)
+//        val myCanvasView=MyCanvasView(this)
+//        setContentView(myCanvasView)
 
         val myCanvasView=MyCanvasView(this)
         myCanvasView.systemUiVisibility= SYSTEM_UI_FLAG_FULLSCREEN
