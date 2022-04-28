@@ -48,6 +48,10 @@ class MyCanvasView(context: Context): View(context) {
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
 
+    //variables to cache the latest x and y values. After the user stops moving and lifts their touch, these are the starting point for the next path (the next segment of the line to draw).
+    private var currentX = 0f
+    private var currentY = 0f
+
     //set background color
     private val backgroundColor=ResourcesCompat.getColor(resources,R.color.colorBackground,null)
 
@@ -93,8 +97,13 @@ class MyCanvasView(context: Context): View(context) {
         private const val STROKE_WIDTH=12f //always float value
     }
 
-
-    private fun touchStart() {}
+    //called when user first touches screen
+    private fun touchStart() {
+        path.reset()
+        path.moveTo(motionTouchEventX, motionTouchEventY)
+        currentX = motionTouchEventX
+        currentY = motionTouchEventY
+    }
 
     private fun touchMove() {}
 
