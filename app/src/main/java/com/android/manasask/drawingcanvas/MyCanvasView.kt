@@ -1,10 +1,7 @@
 package com.android.manasask.drawingcanvas
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.RectShape
@@ -53,6 +50,8 @@ class MyCanvasView(context: Context): View(context) {
     private var currentX = 0f
     private var currentY = 0f
 
+    private lateinit var frame:Rect
+
     //whether user has barely moved his hand or drawn something on screen
     private val touchTolerence=ViewConfiguration.get(context).scaledTouchSlop
 
@@ -71,12 +70,17 @@ class MyCanvasView(context: Context): View(context) {
         extraBitmap= Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
         extraCanvas= Canvas(extraBitmap)
         extraCanvas.drawColor(backgroundColor)
+
+        val inset=40
+        frame= Rect(inset,inset,w-inset,h-inset)
     }
 
     //Override onDraw() and draw the contents of the cached extraBitmap on the canvas associated with the view. The drawBitmap() Canvas method comes in several versions. In this code, you provide the bitmap, the x and y coordinates (in pixels) of the top left corner, and null for the Paint, as you'll set that later.
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(extraBitmap,0f,0f,null)
+
+        canvas.drawRect(frame,paint)
     }
 
     // Set up the paint with which to draw. how things are styled
