@@ -3,9 +3,12 @@ package com.android.manasask.drawingcanvas
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.RectShape
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 
@@ -35,13 +38,21 @@ class MyCanvasView(context: Context): View(context) {
 //        drawable.draw(canvas)
 //    }
 //
+
     //bitmap and canvas for caching what has been drawn before.
     private lateinit var extraBitmap:Bitmap
     private lateinit var extraCanvas: Canvas
 
+
+    //caching the x and y coordinates of the current touch event (the MotionEvent coordinates).
+    private var motionTouchEventX = 0f
+    private var motionTouchEventY = 0f
+
     //set background color
     private val backgroundColor=ResourcesCompat.getColor(resources,R.color.colorBackground,null)
 
+    //holding the color to draw with and initialize it with the colorPaint resource you defined earlier.
+    private val drawColor = ResourcesCompat.getColor(resources, R.color.colorPaint, null)
 
     //In MyCanvasView, override the onSizeChanged() method. This callback method is called by the Android system with the changed screen dimensions, that is, with a new width and height (to change to) and the old width and height (to change from).
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -58,5 +69,47 @@ class MyCanvasView(context: Context): View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(extraBitmap,0f,0f,null)
+    }
+
+    // Set up the paint with which to draw. how things are styled
+    private val paint = Paint().apply {
+        color = drawColor
+        // Smooths out edges of what is drawn without affecting shape.
+        isAntiAlias = true
+        // Dithering affects how colors with higher-precision than the device are down-sampled.
+        isDither = true
+        style = Paint.Style.STROKE // default: FILL , type of painting
+        strokeJoin = Paint.Join.ROUND // default: MITER , curve and line segment join
+        strokeCap = Paint.Cap.ROUND // default: BUTT , strokes shapes end of the line
+        strokeWidth = Companion.STROKE_WIDTH // default: Hairline-width (really thin)
+    }
+
+
+    //object to store the path that is being drawn when following the user's touch on the screen. Import android.graphics.Path for the Path.
+    //whats been drawn
+    private var path= Path()
+
+    companion object {
+        private const val STROKE_WIDTH=12f //always float value
+    }
+
+
+    private fun touchStart() {}
+
+    private fun touchMove() {}
+
+    private fun touchUp() {}
+
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        motionTouchEventX = event.x
+        motionTouchEventY = event.y
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> touchStart()
+            MotionEvent.ACTION_MOVE -> touchMove()
+            MotionEvent.ACTION_UP -> touchUp()
+        }
+        return true
     }
 }
